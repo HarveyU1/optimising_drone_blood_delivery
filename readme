@@ -1,0 +1,120 @@
+Optimising Drone Blood Delivery Python Code Readme
+
+
+
+Authors
+-Harvey Upton
+-Josh Anderson
+
+Date Last Updated
+-11/12/19
+
+Requirments To Run
+-Python 3 or later
+-Numpy module installed
+-Pygame module installed
+-scipy.optimize
+
+Run Times Based On
+-Macbook Pro 13 2015
+-MacOs Mojave
+-2.7Ghz Core I5
+-8GB Ram
+
+
+Code Strucutre
+
+    main_optimisation:
+        Function
+        -This is the main script that should be run.
+        -Outputs the optimum arrangmenet or launchpads in terms of how many launchpads should be used and the distribution of drones between them.
+        -Will show a visual representation of the current optimum that is being calculated.
+
+        Variables
+        -The locations and populations of the hospitals can be changed by modifying the H array
+        -The investement and cost of launchpads/drones can also be changed in the settings section
+
+        Run Time
+        -In current configuration 15 min
+        -Run time varies depending on costings and array H
+
+        Calls
+        -draw map from drone_blood_delivery_map_drawing
+        -runOptimiser from optimiserEvolution
+
+
+
+    optimiserEvolution:
+        Function
+        -This script is responsible for setting up the differential evolution optimiser
+        -Defines boundaries for main_optimisation
+        -Contains function runOptimiser which returns the optimal locations of x number of launchpads and the corresponding utility value
+
+        Variables
+        -No values should be changed in this script
+
+        Run Time
+        -Aproximately 1 -5 minutes
+        -Depends on size of array H and number of launchpads
+
+        Calls
+        -objF from objectiveFunction
+
+    
+
+    objectiveFunction:
+        Function
+        -Defines the complete objective function which returns the utility value to be minimised
+
+        Variables
+        -Change r the vary the maximum drone range in km
+        -Change q to vary how utility is effected by distance between launchpad and hospital
+        -change b to vary the drone benefit factor which is how many people each drone can sufficiently cater for
+
+        Run Time
+        -<1s
+
+        Calls
+        -None
+
+
+
+    tuningObjectiveFunction:
+        Function
+        -Used for tuning the objective function and observing patterns for when only one launchpad is used.
+        -Evaluates objective function for just one launchpad at points in a grid within the boundaries of the map, x,y cordinates are location of 
+        launchpad.
+        -Displays the gradient of colours which depend on utility value at each point
+
+        Variables
+        -change sF to vary the sample interval. an sF of 1 will sample every km which is 1000*1000 points.
+
+        Run Time
+        - Proportional to (1/sF)^2
+        - The smaller the sample interval the longer it takes to run
+        -Aproximately 15s for sF value of 10
+
+        Calls
+        -draw map from drone_blood_delivery_map_drawing
+        -objF from objectiveFunction
+
+    
+
+    drone_blood_delivery_map_drawing:
+        Function
+        -Used for displaying visual representation of map, hospitals and locations of launchpads being built
+        -Can be used to display heatmap based on evaluation of utility value in array of x,y values
+        -Main function is drawMap which can be provided with different arguments to change what is drawn 
+        -If a utility value is supplied it will be displayed in the top left of the screen
+        -If an objVals array is provided a gradient of colours will be dran depending on the utility value at each point
+
+        Variables
+        -No values should be changed in this script
+
+        Run Time
+        - 0<run time <60s
+        -Depends on arguments provided
+        -Takes up to 60s if drawing gradient
+
+        Calls
+        -None
